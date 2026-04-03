@@ -1,0 +1,161 @@
+# ============================================================
+# Property Manager API — Example Operations
+# Import this file into Apollo Sandbox or any GraphQL client.
+# ============================================================
+
+# --------------------------------------------------
+# User Story 1: Query all properties
+# --------------------------------------------------
+query GetAllProperties {
+  properties {
+    id
+    street
+    city
+    state
+    zipCode
+    lat
+    long
+    weatherData
+    createdAt
+  }
+}
+
+# --------------------------------------------------
+# User Story 2: Sort properties by date of creation
+# --------------------------------------------------
+query GetPropertiesSortedByDateAsc {
+  properties(sortByCreatedAt: asc) {
+    id
+    street
+    city
+    state
+    zipCode
+    createdAt
+  }
+}
+
+query GetPropertiesSortedByDateDesc {
+  properties(sortByCreatedAt: desc) {
+    id
+    street
+    city
+    state
+    zipCode
+    createdAt
+  }
+}
+
+# --------------------------------------------------
+# User Story 3: Filter properties by city, zip code, state
+# Filters use exact matching.
+# --------------------------------------------------
+query FilterByCity {
+  properties(filter: { city: "Texas City" }) {
+    id
+    street
+    city
+    state
+    zipCode
+  }
+}
+
+query FilterByZipCode {
+  properties(filter: { zipCode: "77590" }) {
+    id
+    street
+    city
+    zipCode
+  }
+}
+
+query FilterByState {
+  properties(filter: { state: "TX" }) {
+    id
+    street
+    city
+    state
+    zipCode
+  }
+}
+
+query FilterCombined {
+  properties(filter: { city: "Texas City", state: "TX", zipCode: "77591" }) {
+    id
+    street
+    city
+    state
+    zipCode
+  }
+}
+
+# --------------------------------------------------
+# Pagination: limit (default 50, max 200) and offset
+# --------------------------------------------------
+query GetPropertiesPaginated {
+  properties(limit: 10, offset: 0, sortByCreatedAt: desc) {
+    id
+    street
+    city
+    state
+    zipCode
+    createdAt
+  }
+}
+
+# --------------------------------------------------
+# User Story 4: Query details of any property
+# --------------------------------------------------
+query GetPropertyDetails($id: ID!) {
+  property(id: $id) {
+    id
+    street
+    city
+    state
+    zipCode
+    lat
+    long
+    weatherData
+    createdAt
+    updatedAt
+  }
+}
+
+{
+  "id": "seed-8515-twelve-oaks-dr"
+}
+
+
+# --------------------------------------------------
+# User Story 5: Add a new property
+# (Weatherstack API is called automatically to populate
+#  weatherData, lat, and long)
+# --------------------------------------------------
+mutation CreateProperty {
+  createProperty(input: {
+    street: "15528 E Golden Eagle Blvd"
+    city: "Fountain Hills"
+    state: "AZ"
+    zipCode: "85268"
+  }) {
+    id
+    street
+    city
+    state
+    zipCode
+    lat
+    long
+    weatherData
+    createdAt
+  }
+}
+
+# --------------------------------------------------
+# User Story 6: Delete any property
+# --------------------------------------------------
+mutation DeleteProperty($id: ID!) {
+  deleteProperty(id: $id) {
+    id
+    street
+    city
+  }
+}

@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Property {
+  id          String   @id @default(cuid())
+  street      String   @db.VarChar(255)
+  city        String   @db.VarChar(100)
+  state       String   @db.Char(2)
+  zipCode     String   @map("zip_code") @db.Char(5)
+  lat         Float?
+  long        Float?
+  weatherData Json?    @map("weather_data")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([city])
+  @@index([state])
+  @@index([zipCode])
+  @@index([createdAt])
+  @@map("property")
+}
